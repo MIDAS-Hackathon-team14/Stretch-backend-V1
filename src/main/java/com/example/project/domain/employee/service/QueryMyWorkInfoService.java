@@ -6,6 +6,8 @@ import com.example.project.domain.employee.domain.repository.DailyRecordReposito
 import com.example.project.domain.employee.domain.repository.PlanRepository;
 import com.example.project.domain.employee.presentation.dto.response.WorkPlanInfoResponse;
 import com.example.project.domain.employee.presentation.dto.response.WorkPlanInfoResponse.WorkPlanResponse;
+import com.example.project.domain.user.domain.User;
+import com.example.project.domain.user.facade.UserFacade;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -21,8 +23,11 @@ public class QueryMyWorkInfoService {
 
     private final DailyRecordRepository dailyRecordRepository;
     private final PlanRepository planRepository;
+    private final UserFacade userFacade;
 
     public WorkPlanInfoResponse execute() {
+
+        User user = userFacade.getCurrentUser();
 
         LocalDateTime today = LocalDateTime.now();
         Integer dayOfWeek = today.toLocalDate().getDayOfWeek().getValue();
@@ -30,8 +35,9 @@ public class QueryMyWorkInfoService {
         LocalDateTime startWeek = LocalDateTime.of(today.toLocalDate().minusDays(dayOfWeek - 1), LocalTime.of(0, 0));
         LocalDateTime endWeek = LocalDateTime.of(today.toLocalDate().plusDays(7 - dayOfWeek), LocalTime.of(23, 59));
 
-        List<Plan> plans = planRepository.queryByStartTimeBetween(startWeek, endWeek);
-        List<DailyRecord> dailyRecords = dailyRecordRepository.queryByRecordStartBetween(startWeek, endWeek);
+
+        List<Plan> plans = planRepository.queryByStartTimeBetweenAndUser(startWeek, endWeek, user);
+        List<DailyRecord> dailyRecords = dailyRecordRepository.queryByRecordStartBetweenAndUser(startWeek, endWeek, user);
         List<WorkPlanResponse> planResponseList = new ArrayList<>();
 
         int recordSum = 0;
@@ -46,7 +52,7 @@ public class QueryMyWorkInfoService {
                         .isPlaned(true)
                         .date(i.toLocalDate())
                         .isOutOfOffice(plan.getIsOutOfOffice())
-                        .outOfOfficeType(plan.getOutOfOfficeType())
+                        .outOfOfficeType(plan.getOutOfOfficeType().getName())
                         .planStart(plan.getStartTime())
                         .planEnd(plan.getEndTime())
                         .recordStart(dailyRecord.getRecordStart())
@@ -65,7 +71,7 @@ public class QueryMyWorkInfoService {
                         .isPlaned(true)
                         .date(i.toLocalDate())
                         .isOutOfOffice(plan.getIsOutOfOffice())
-                        .outOfOfficeType(plan.getOutOfOfficeType())
+                        .outOfOfficeType(plan.getOutOfOfficeType().getName())
                         .planStart(plan.getStartTime())
                         .planEnd(plan.getEndTime())
                         .recordStart(LocalDateTime.of(i.toLocalDate(), LocalTime.of(0,0)))

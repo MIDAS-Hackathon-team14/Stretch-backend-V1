@@ -28,7 +28,7 @@ public class DoPlanService {
         }
 
         LocalDate planDate = request.getPlanStart().toLocalDate();
-        if (planRepository.existsByStartTimeBetween(planDate.atStartOfDay(), planDate.plusDays(1).atStartOfDay())) {
+        if (planRepository.existsByStartTimeBetweenAndUser(planDate.atStartOfDay(), planDate.plusDays(1).atStartOfDay(), user)) {
             throw PlanAlreadyExistException.EXCEPTION;
         }
 

@@ -26,13 +26,12 @@ import javax.validation.Valid;
 @RestController
 public class EmployeeController {
 
-
     private final QueryMyWorkInfoService queryMyWorkInfoServiceService;
     private final DoPlanService doPlanService;
     private final WorkOnService workOnService;
     private final WorkOffService workOffService;
     private final QueryWorkStatusListService queryWorkStatusListService;
-    private final QueryUserWorkInfoService queryWorkStatusInfoService;
+    private final QueryUserWorkInfoService queryUserWorkInfoService;
 
 
     @GetMapping("/work/info")
@@ -64,7 +63,7 @@ public class EmployeeController {
     }
 
     @PostMapping("/work/info/{user-id}")
-    public WorkPlanInfoResponse queryWorkStatusInfo(@PathVariable("user-id") String userId){
-        return queryWorkStatusInfoService.execute(userId);
+    public WorkPlanInfoResponse queryUserWorkInfo(@PathVariable("user-id") Long userId){
+        return queryUserWorkInfoService.execute(userId);
     }
 }

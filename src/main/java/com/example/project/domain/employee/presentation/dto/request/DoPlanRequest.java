@@ -18,9 +18,7 @@ public class DoPlanRequest {
 
     private FlexPlace place;
 
-    @NotNull(message = "plan_start는 null이어선 안됩니다")
     private LocalDateTime planStart;
 
-    @NotNull(message = "plan_end는 null이어선 안됩니다")
     private LocalDateTime planEnd;
 }
