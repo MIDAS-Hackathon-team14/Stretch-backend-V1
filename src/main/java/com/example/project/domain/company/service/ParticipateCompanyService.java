@@ -9,6 +9,7 @@ import com.example.project.domain.user.domain.User;
 import com.example.project.domain.user.facade.UserFacade;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 @Service
 @RequiredArgsConstructor
@@ -17,6 +18,7 @@ public class ParticipateCompanyService {
     private final CompanyRepository companyRepository;
     private final UserFacade userFacade;
 
+    @Transactional
     public ParticipateCompanyResponse execute(ParticipateCompanyRequest request) {
 
         Company company = companyRepository.queryByInviteCode(request.getCode())

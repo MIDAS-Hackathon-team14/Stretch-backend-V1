@@ -5,8 +5,12 @@ import com.example.project.domain.company.domain.enums.FlexPlace;
 import com.example.project.domain.company.domain.repository.CompanyRepository;
 import com.example.project.domain.company.presentation.dto.request.CreateCompanyRequest;
 import com.example.project.domain.company.presentation.dto.reseponse.CreateCompanyResponse;
+import com.example.project.domain.user.domain.User;
+import com.example.project.domain.user.domain.repository.UserRepository;
+import com.example.project.domain.user.facade.UserFacade;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.UUID;
 import java.util.stream.Collectors;
@@ -16,7 +20,10 @@ import java.util.stream.Collectors;
 public class CreateCompanyService {
 
     private final CompanyRepository companyRepository;
+    private final UserRepository userRepository;
+    private final UserFacade userFacade;
 
+    @Transactional
     public CreateCompanyResponse execute(CreateCompanyRequest request) {
 
         String uuidCode = UUID.randomUUID().toString();
@@ -38,6 +45,10 @@ public class CreateCompanyService {
                 .inviteCode(uuidCode.substring(0, 8))
                 .build()
         );
+
+        User user = userFacade.getCurrentUser();
+        user.participateCompany(company);
+        userRepository.save(user);
 
         return new CreateCompanyResponse(company.getId());
     }
