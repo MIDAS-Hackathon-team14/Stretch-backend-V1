@@ -13,6 +13,7 @@ spring:
       generate-ddl: false
     defer-datasource-initialization: true
     show-sql: true
+  jackson:
     property-naming-strategy: SNAKE_CASE
 
 jwt:
