@@ -2,7 +2,6 @@ package com.example.project.domain.user.facade;
 
 import com.example.project.domain.user.domain.User;
 import com.example.project.domain.user.domain.repository.UserRepository;
-import com.example.project.domain.user.exception.PasswordMismatchException;
 import com.example.project.domain.user.exception.UserNotFoundException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -33,11 +32,5 @@ public class UserFacade {
 
     public boolean emailIsExist(String email) {
         return userRepository.findByEmail(email).isPresent();
-    }
-
-    public void checkPassword(User user, String passowrd) {
-        if (!passwordEncoder.matches(passowrd, user.getPassword())) {
-            throw PasswordMismatchException.EXCEPTION;
-        }
     }
 }
