@@ -44,9 +44,11 @@ public class QueryMyWorkInfoService {
         int plansIdx = 0;
         int dailyRecordsIdx = 0;
         for (LocalDateTime i = startWeek; !i.isAfter(endWeek); i = i.plusDays(1)) {
-            if (!i.isAfter(LocalDateTime.now())) { //DailyRecord가 생성된 상황 (출근한 날)
-                DailyRecord dailyRecord = dailyRecords.get(dailyRecordsIdx++);
+
+            if (plans.size() > plansIdx && plans.get(plansIdx).getStartTime().toLocalDate().equals(i.toLocalDate())
+                    && dailyRecords.size() > dailyRecordsIdx && dailyRecords.get(dailyRecordsIdx).getRecordStart().toLocalDate().equals(i.toLocalDate())) {
                 Plan plan = plans.get(plansIdx++);
+                DailyRecord dailyRecord = dailyRecords.get(dailyRecordsIdx++);
                 planResponseList.add(WorkPlanResponse
                         .builder()
                         .isPlaned(true)
@@ -64,8 +66,7 @@ public class QueryMyWorkInfoService {
                                         dailyRecord.getRecordEnd()))
                         .build()
                 );
-                recordSum += dailyRecord.getRecordEnd().compareTo(dailyRecord.getRecordStart());
-            } else if (plans.get(plansIdx).getStartTime().toLocalDate() == i.toLocalDate()) { //Plan이 생성된 날
+            } else if (plans.size() > plansIdx && plans.get(plansIdx).getStartTime().toLocalDate().equals(i.toLocalDate())) {
                 Plan plan = plans.get(plansIdx++);
                 planResponseList.add(WorkPlanResponse.builder()
                         .isPlaned(true)
@@ -74,8 +75,8 @@ public class QueryMyWorkInfoService {
                         .outOfOfficeType(plan.getOutOfOfficeType().getName())
                         .planStart(plan.getStartTime())
                         .planEnd(plan.getEndTime())
-                        .recordStart(LocalDateTime.of(i.toLocalDate(), LocalTime.of(0,0)))
-                        .recordEnd(LocalDateTime.of(i.toLocalDate(), LocalTime.of(0,0)))
+                        .recordStart(LocalDateTime.of(i.toLocalDate(), LocalTime.of(0, 0)))
+                        .recordEnd(LocalDateTime.of(i.toLocalDate(), LocalTime.of(0, 0)))
                         .build()
                 );
             } else { //그 외

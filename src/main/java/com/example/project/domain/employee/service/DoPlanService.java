@@ -23,7 +23,7 @@ public class DoPlanService {
 
         User user = userFacade.getCurrentUser();
 
-        if (request.getPlanStart().toLocalDate() != request.getPlanEnd().toLocalDate()) {
+        if (!request.getPlanStart().toLocalDate().equals(request.getPlanEnd().toLocalDate())) {
             throw BadRequestException.EXCEPTION;
         }
 
