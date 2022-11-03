@@ -1,6 +1,5 @@
 package com.example.project.domain.employee.presentation.dto.response;
 
-import com.example.project.domain.employee.domain.enums.OutOfOfficeType;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
@@ -26,7 +25,7 @@ public class WorkPlanInfoResponse {
         private Boolean isPlaned;
 
         private Boolean isOutOfOffice;
-        private OutOfOfficeType outOfOfficeType;
+        private String outOfOfficeType;
 
         private LocalDateTime planStart;
         private LocalDateTime planEnd;

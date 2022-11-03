@@ -14,6 +14,7 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
+import javax.persistence.OneToOne;
 import java.time.LocalDateTime;
 
 @Getter
@@ -34,11 +35,20 @@ public class DailyRecord {
     @Column(nullable = true)
     private LocalDateTime recordEnd;
 
+    @Column(nullable = true)
+    private Integer recordSum;
+
     @ManyToOne
     @JoinColumn(name = "user_id")
     private User user;
 
-    public void recordWorkOff(LocalDateTime now) {
+    @OneToOne
+    @JoinColumn(name = "plan_id")
+    private Plan plan;
+
+    public void recordWorkOff(LocalDateTime now, Plan plan) {
         this.recordEnd = now;
+        this.plan = plan;
+        this.recordSum = recordEnd.compareTo(recordStart);
     }
 }

@@ -9,6 +9,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
 import java.util.UUID;
+import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
@@ -22,11 +23,11 @@ public class CreateCompanyService {
 
         Boolean isAcceptHome = request.getFlexPlaceList()
                 .stream()
-                .filter(o -> o.equals(FlexPlace.HOME)).toList().size() != 0;
+                .filter(o -> o.equals(FlexPlace.HOME)).collect(Collectors.toList()).size() != 0;
 
         Boolean isAcceptSmartWork = request.getFlexPlaceList()
                 .stream()
-                .filter(o -> o.equals(FlexPlace.SMART_WORK)).toList().size() != 0;
+                .filter(o -> o.equals(FlexPlace.SMART_WORK)).collect(Collectors.toList()).size() != 0;
 
         Company company = companyRepository.save(Company
                 .builder()

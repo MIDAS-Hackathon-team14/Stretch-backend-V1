@@ -7,14 +7,17 @@ spring:
 
   jpa:
     hibernate:
-      ddl-auto: create
+      ddl-auto: validate
     properties:
       format_sql: true
       generate-ddl: false
     defer-datasource-initialization: true
     show-sql: true
+  jackson:
     property-naming-strategy: SNAKE_CASE
 
 jwt:
   secret-key: ${JWT_SECRET}
   access-exp: ${ACCESS_EXP}
+  header: Authorization
+  prefix: Bearer
