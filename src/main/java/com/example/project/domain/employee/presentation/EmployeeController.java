@@ -26,7 +26,7 @@ import javax.validation.Valid;
 @RestController
 public class EmployeeController {
 
-    private final QueryMyWorkInfoService queryMyWorkInfoServiceService;
+    private final QueryMyWorkInfoService queryMyWorkInfoService;
     private final DoPlanService doPlanService;
     private final WorkOnService workOnService;
     private final WorkOffService workOffService;
@@ -36,7 +36,7 @@ public class EmployeeController {
 
     @GetMapping("/work/info")
     public WorkPlanInfoResponse queryMyWorkInfoService(){
-        return queryMyWorkInfoServiceService.execute();
+        return queryMyWorkInfoService.execute();
     }
 
     @ResponseStatus(HttpStatus.CREATED)

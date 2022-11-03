@@ -13,7 +13,6 @@ import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
 import java.time.LocalTime;
-import java.time.temporal.ChronoUnit;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -35,8 +34,7 @@ public class QueryMyWorkInfoService {
         LocalDateTime startWeek = LocalDateTime.of(today.toLocalDate().minusDays(dayOfWeek - 1), LocalTime.of(0, 0));
         LocalDateTime endWeek = LocalDateTime.of(today.toLocalDate().plusDays(7 - dayOfWeek), LocalTime.of(23, 59));
 
-
-        List<Plan> plans = planRepository.queryByStartTimeBetweenAndUser(startWeek, endWeek, user);
+        List<Plan> plans = planRepository.queryByStartTimeBetweenAndUserOrderByStartTime(startWeek, endWeek, user);
         List<DailyRecord> dailyRecords = dailyRecordRepository.queryByRecordStartBetweenAndUser(startWeek, endWeek, user);
         List<WorkPlanResponse> planResponseList = new ArrayList<>();
 
@@ -45,47 +43,21 @@ public class QueryMyWorkInfoService {
         int dailyRecordsIdx = 0;
         for (LocalDateTime i = startWeek; !i.isAfter(endWeek); i = i.plusDays(1)) {
 
-            if (plans.size() > plansIdx && plans.get(plansIdx).getStartTime().toLocalDate().equals(i.toLocalDate())
-                    && dailyRecords.size() > dailyRecordsIdx && dailyRecords.get(dailyRecordsIdx).getRecordStart().toLocalDate().equals(i.toLocalDate())) {
-                Plan plan = plans.get(plansIdx++);
-                DailyRecord dailyRecord = dailyRecords.get(dailyRecordsIdx++);
-                planResponseList.add(WorkPlanResponse
-                        .builder()
-                        .isPlaned(true)
-                        .date(i.toLocalDate())
-                        .isOutOfOffice(plan.getIsOutOfOffice())
-                        .outOfOfficeType(plan.getOutOfOfficeType().getName())
-                        .planStart(plan.getStartTime())
-                        .planEnd(plan.getEndTime())
-                        .recordStart(dailyRecord.getRecordStart())
-                        .recordEnd(dailyRecord.getRecordEnd())
-                        .recordSum((int) ChronoUnit.MINUTES.between(
-                                dailyRecord.getRecordStart(),
-                                dailyRecord.getRecordEnd() == null ?
-                                        LocalDateTime.now() :
-                                        dailyRecord.getRecordEnd()))
-                        .build()
-                );
-            } else if (plans.size() > plansIdx && plans.get(plansIdx).getStartTime().toLocalDate().equals(i.toLocalDate())) {
-                Plan plan = plans.get(plansIdx++);
-                planResponseList.add(WorkPlanResponse.builder()
-                        .isPlaned(true)
-                        .date(i.toLocalDate())
-                        .isOutOfOffice(plan.getIsOutOfOffice())
-                        .outOfOfficeType(plan.getOutOfOfficeType().getName())
-                        .planStart(plan.getStartTime())
-                        .planEnd(plan.getEndTime())
-                        .recordStart(LocalDateTime.of(i.toLocalDate(), LocalTime.of(0, 0)))
-                        .recordEnd(LocalDateTime.of(i.toLocalDate(), LocalTime.of(0, 0)))
-                        .build()
-                );
-            } else { //그 외
-                planResponseList.add(WorkPlanResponse.builder()
-                        .isPlaned(false)
-                        .date(i.toLocalDate())
-                        .build()
-                );
+            WorkPlanResponse workPlanResponse = WorkPlanResponse
+                    .builder()
+                    .isPlaned(false)
+                    .date(i.toLocalDate()).build();
+
+            System.out.println(plansIdx + " " + plans.get(plansIdx).getStartTime().toLocalDate()+" "+i.toLocalDate()+" "+plans.get(plansIdx).getStartTime().toLocalDate().equals(i.toLocalDate()));
+            if (plans.size() > plansIdx && plans.get(plansIdx).getStartTime().toLocalDate().equals(i.toLocalDate())) {
+                workPlanResponse.setPlan(plans.get(plansIdx++));
             }
+
+            if(dailyRecords.size() > dailyRecordsIdx && dailyRecords.get(dailyRecordsIdx).getRecordStart().toLocalDate().equals(i.toLocalDate())) {
+                workPlanResponse.setDailyRecord(dailyRecords.get(dailyRecordsIdx));
+            }
+
+            planResponseList.add(workPlanResponse);
         }
 
         return WorkPlanInfoResponse
