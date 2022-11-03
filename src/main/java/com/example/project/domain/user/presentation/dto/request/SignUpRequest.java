@@ -17,7 +17,6 @@ public class SignUpRequest {
     private String name;
 
     @Size(max = 40)
-    @Pattern(regexp = RegexpProperty.EMAIL)
     private String email;
 
     @NotBlank(message = "password는 Null 또는 공백 또는 띄어쓰기를 허용하지 않습니다.")

@@ -1,11 +1,9 @@
 package com.example.project.domain.admin.presentation.dto.request;
 
-import com.example.project.global.util.RegexpProperty;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
 import javax.validation.constraints.NotBlank;
-import javax.validation.constraints.Pattern;
 import javax.validation.constraints.Size;
 
 @Getter
@@ -17,6 +15,5 @@ public class ModifyUserInfoRequest {
     private String name;
 
     @Size(max = 40)
-    @Pattern(regexp = RegexpProperty.EMAIL)
     private String email;
 }
