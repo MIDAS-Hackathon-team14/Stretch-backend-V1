@@ -54,4 +54,9 @@ public class User {
     public void participateCompany(Company company) {
         this.company = company;
     }
+
+    public void modifyInfo(String name, String email) {
+        this.name = name;
+        this.email = email;
+    }
 }
