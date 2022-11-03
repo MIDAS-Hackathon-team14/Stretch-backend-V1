@@ -37,7 +37,7 @@ public class CompanyController {
         return createCompanyService.execute(request);
     }
 
-    @PostMapping("")
+    @GetMapping("")
     public CompanyInfoResponse queryMyCompany(){
         return queryMyCompanyService.execute();
     }
@@ -47,7 +47,7 @@ public class CompanyController {
         return queryInviteCodeService.execute();
     }
 
-    @GetMapping("/invite")
+    @PostMapping("/invite")
     public ParticipateCompanyResponse participateCompany(@RequestBody @Valid ParticipateCompanyRequest request){
         return participateCompanyService.execute(request);
     }

@@ -40,29 +40,29 @@ public class EmployeeController {
     }
 
     @ResponseStatus(HttpStatus.CREATED)
-    @GetMapping("/work/plan")
+    @PostMapping("/work/plan")
     public void doPlan(@RequestBody @Valid DoPlanRequest request){
         doPlanService.execute(request);
     }
 
     @ResponseStatus(HttpStatus.NO_CONTENT)
-    @GetMapping("/work/go")
+    @PostMapping("/work/go")
     public void workGo(){
         workOnService.execute();
     }
 
     @ResponseStatus(HttpStatus.NO_CONTENT)
-    @GetMapping("/work/leave")
+    @PostMapping("/work/leave")
     public void workLeave(){
         workOffService.execute();
     }
 
-    @PostMapping("/work/status/list")
+    @GetMapping("/work/status/list")
     public WorkStatusListResponse queryWorkStatusList(){
         return queryWorkStatusListService.execute();
     }
 
-    @PostMapping("/work/info/{user-id}")
+    @GetMapping("/work/info/{user-id}")
     public WorkPlanInfoResponse queryUserWorkInfo(@PathVariable("user-id") Long userId){
         return queryUserWorkInfoService.execute(userId);
     }
