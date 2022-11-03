@@ -25,7 +25,7 @@ public class QueryMyCompanyService {
                 .builder()
                 .companyId(company.getId())
                 .name(company.getName())
-                .flexTime(company.getFlexTime())
+                .flexTime(company.getFlexTime().getName())
                 .employeesCount(company.getEmployeeList().size())
                 .build();
     }
