@@ -48,10 +48,12 @@ public class QueryMyWorkInfoService {
                     .isPlaned(false)
                     .date(i.toLocalDate()).build();
 
-            System.out.println(plansIdx + " " + plans.get(plansIdx).getStartTime().toLocalDate()+" "+i.toLocalDate()+" "+plans.get(plansIdx).getStartTime().toLocalDate().equals(i.toLocalDate()));
             if (plans.size() > plansIdx && plans.get(plansIdx).getStartTime().toLocalDate().equals(i.toLocalDate())) {
                 workPlanResponse.setPlan(plans.get(plansIdx++));
             }
+
+            System.out.println(dailyRecords.size() + " "+ dailyRecordsIdx);
+            if(dailyRecords.size() > dailyRecordsIdx) System.out.println(dailyRecords.get(dailyRecordsIdx).getRecordStart().toLocalDate() + " " + i.toLocalDate());
 
             if(dailyRecords.size() > dailyRecordsIdx && dailyRecords.get(dailyRecordsIdx).getRecordStart().toLocalDate().equals(i.toLocalDate())) {
                 workPlanResponse.setDailyRecord(dailyRecords.get(dailyRecordsIdx));

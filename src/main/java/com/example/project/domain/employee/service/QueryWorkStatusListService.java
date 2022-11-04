@@ -36,9 +36,7 @@ public class QueryWorkStatusListService {
                 ).stream()
                 .map(o -> {
                     Plan plan = o.getPlan();
-                    System.out.println(users.size());
                     users.remove(o.getUser());
-                    System.out.println(users.size());
                     return WorkStatusResponse
                             .builder()
                             .userId(o.getUser().getId())

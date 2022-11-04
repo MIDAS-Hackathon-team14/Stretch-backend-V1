@@ -41,7 +41,7 @@ public class WorkPlanInfoResponse {
         public void setPlan(Plan plan) {
             this.isPlaned = true;
             this.isOutOfOffice = plan.getIsOutOfOffice();
-            this.outOfOfficeType = plan.getOutOfOfficeType().getName();
+            this.outOfOfficeType = plan.getOutOfOfficeType() != null ? plan.getOutOfOfficeType().getName() : null;
             this.planStart = plan.getStartTime();
             this.planEnd = plan.getEndTime();
             this.recordStart = LocalDateTime.of(LocalDateTime.now().toLocalDate(), LocalTime.of(0, 0));
